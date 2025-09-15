@@ -29,11 +29,31 @@ func AddIPToIPSet(ips []string) error {
 
 func FlushIPSet() error {
 	if _, err := exec.LookPath("nft"); err == nil {
-		nftCmd := exec.Command("nft", "list", "set", "inet", "fw4", "fail2banop")
+		nftCmd := exec.Command("nft", "list", "set", "inet", "fw4", ipsetName)
 		if err := nftCmd.Run(); err != nil {
 			return err
 		}
 		return nil
 	}
+	// Fallback to ipset flush
+	cmd := exec.Command("ipset", "flush", ipsetName)
+	if err := cmd.Run(); err != nil {
+		return err
+	}
+	return nil
+}
 
+func RemoveIPFromIPSet(ip string) error {
+	if _, err := exec.LookPath("nft"); err == nil {
+		nftCmd := exec.Command("nft", "delete", "element", "inet", "fw4", ipsetName, fmt.Sprintf("{ %s }", ip))
+		if err := nftCmd.Run(); err != nil {
+			return err
+		}
+		return nil
+	}
+	cmd := exec.Command("ipset", "del", ipsetName, ip)
+	if err := cmd.Run(); err != nil {
+		return err
+	}
+	return nil
 }
