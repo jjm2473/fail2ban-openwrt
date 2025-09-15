@@ -61,3 +61,26 @@ func TestLogNewIP_AlreadyBanned(t *testing.T) {
 		t.Errorf("Banned time should be updated for already banned IP")
 	}
 }
+
+func TestCheckTimeouts_Unblock(t *testing.T) {
+	mock := &mockBlockIP{blocked: make(map[string]bool), unblocked: make(map[string]bool)}
+	ban := NewFail2ban(10, 2, 1, mock)
+	ip := "10.0.0.1"
+	banned := &banIP{
+		ipstr:      ip,
+		bannedTime: time.Now().Add(-2 * time.Second), // 已过期
+	}
+	banned.el = ban.bannedTimeoutList.PushBack(banned)
+	ban.bannedIPs[ip] = banned
+
+	err := ban.checkTimeouts()
+	if err != nil {
+		t.Errorf("checkTimeouts should not return error, got: %v", err)
+	}
+	if _, ok := ban.bannedIPs[ip]; ok {
+		t.Errorf("IP should be removed from bannedIPs after timeout")
+	}
+	if !mock.unblocked[ip] {
+		t.Errorf("UnblockIP should be called for expired IP")
+	}
+}

@@ -86,6 +86,12 @@ Start 函数就是启动监控，并分析时间，以及文本，如果是 IsDr
 这几个参数分为为 LoginErrorWindow LoginErrorThreshold BanDuration
 ```
 
+### 实现 main 函数
+
+```
+#file:fail2ban_main.go 实现 main 函数，调用 #file:fail2ban.go 对应的对象的函数。并且 block 使用 #file:block.go 里面的封禁IP 以及解除封禁IP 的函数。
+```
+
 ### 一些 nft 命令参考
 
 ```
