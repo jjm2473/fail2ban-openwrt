@@ -7,15 +7,18 @@ import (
 
 // AddIPToIPSet adds the given IP to the specified ipset or nft set.
 func AddIPToIPSet(ip string, setName string) error {
-	// Try ipset first
-	cmd := exec.Command("ipset", "add", setName, ip)
-	if err := cmd.Run(); err == nil {
+	// Check if nft exists
+	if _, err := exec.LookPath("nft"); err == nil {
+		// nft add element ip filter <set> { <ip> }
+		nftCmd := exec.Command("nft", "add", "element", "ip", "filter", setName, fmt.Sprintf("{ %s }", ip))
+		if err := nftCmd.Run(); err != nil {
+			return err
+		}
 		return nil
 	}
-	// If ipset fails, try nft
-	// nft add element ip filter <set> { <ip> }
-	nftCmd := exec.Command("nft", "add", "element", "ip", "filter", setName, fmt.Sprintf("{ %s }", ip))
-	if err := nftCmd.Run(); err != nil {
+	// Fallback to ipset
+	cmd := exec.Command("ipset", "add", setName, ip)
+	if err := cmd.Run(); err != nil {
 		return err
 	}
 	return nil

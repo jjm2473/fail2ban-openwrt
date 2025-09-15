@@ -69,3 +69,14 @@ daemon.err uhttpd[11561]: [info] luci: failed login on / for root from 192.168.9
 
 
 ### 一些 nft 命令参考
+
+```
+
+nft list table inet fw4|grep fail2ban
+nft add set inet fw4 fail2banop { type ipv4_addr \; }
+nft add element inet fw4 fail2banop { 192.0.2.1, 192.0.2.3 }
+nft delete element inet fw4 fail2banop { 192.0.2.1 }
+nft flush set inet fw4 fail2banop
+nft list set inet fw4 fail2banop
+
+```
