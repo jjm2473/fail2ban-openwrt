@@ -59,3 +59,13 @@ daemon.err uhttpd[11561]: [info] luci: failed login on / for root from 192.168.9
 正则表达式里面也可以去掉时间的正则
 
 ```
+
+### 高性能禁用IP访问
+
+```
+我们的这个程序运行在 Linux 当中，我们把 ip 添加到某个 ipset 的规则，而这个 ipset 的规则，会加入到防火墙的禁止访问列表中，从而达到无法访问 SSH 或者 uhttpd 的目的。
+请帮实现一个函数，可以把一个 IP 加入禁用的 ipset 集合中。
+```
+
+
+### 一些 nft 命令参考
