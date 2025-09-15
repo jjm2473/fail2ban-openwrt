@@ -2,6 +2,7 @@ package fail2ban_op
 
 import (
 	"bufio"
+	"context"
 	"os/exec"
 	"regexp"
 	"strings"
@@ -14,8 +15,8 @@ type LogEntry struct {
 }
 
 // FollowLogRead 持续跟踪 logread -f 输出，解析时间和文本
-func FollowLogRead(handleEntry func(LogEntry)) error {
-	cmd := exec.Command("logread", "-f")
+func FollowLogRead(ctx context.Context, handleEntry func(LogEntry)) error {
+	cmd := exec.CommandContext(ctx, "logread", "-f")
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		return err
