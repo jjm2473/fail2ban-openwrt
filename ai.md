@@ -67,6 +67,24 @@ daemon.err uhttpd[11561]: [info] luci: failed login on / for root from 192.168.9
 请帮实现一个函数，可以把一个 IP 加入禁用的 ipset 集合中。
 ```
 
+### 完整实现 fail2ban
+
+```
+#file:fail2ban.go 完整实现本文件，功能如下：
+通过 logread -f 跟踪日志，可以得到日志的时间信息，以及文本信息。参考文件 #file:logread.go 
+如果在一定时间内，出现 dropbear 或者 uhttpd 登录错误的一定的时间内，则封禁这个 IP 一定的时间。
+这几个参数分为为 LoginErrorWindow LoginErrorThreshold BanDuration
+Start 函数就是启动监控，并分析时间，以及文本，如果是 IsDropbearBadPasswordLog 或者IsUhttpdLoginErrorLog 则调用 #file:block.go 里面的相关函数封禁这个 IP，以及记录这个 IP 的封禁时间，等一定时间内，再不封禁这个 IP 以保证内存不会无限
+```
+
+### 实现 logNewIP 函数
+
+```
+#file:fail2ban.go 实现 logNewIP 函数。具体实现功能如下：
+#file:fail2ban.go 完整实现本文件，功能如下：
+如何在一定时间内，一个IP被记录多次，则封禁这个 IP 一定的时间后，再不封禁这个 IP 以保证内存不会过多。
+这几个参数分为为 LoginErrorWindow LoginErrorThreshold BanDuration
+```
 
 ### 一些 nft 命令参考
 
