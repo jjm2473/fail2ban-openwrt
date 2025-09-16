@@ -4,10 +4,15 @@ import (
 	"container/list"
 	"context"
 	"errors"
+	"fmt"
 	"time"
 )
 
 const BlockIPMax = 1024 * 1024 // 最大封禁 IP 数量
+
+var (
+	ShowBannedIPs = false // 是否打印当前被封禁的 IP 列表，调试用
+)
 
 type BlockIP interface {
 	BlockIP(ipstr string) error
@@ -121,6 +126,9 @@ func (ban *Fail2ban) logNewIP(lip logIP) error {
 		bip.el = ban.bannedTimeoutList.PushBack(bip)
 		ban.bannedIPs[lip.ipstr] = bip
 		ban.block.BlockIP(lip.ipstr)
+		if ShowBannedIPs {
+			fmt.Println("Banned IP:", lip.ipstr, "total errors:", len(newTimes))
+		}
 
 		if len(ban.bannedIPs) > ban.blockIPMax {
 			// 删除最早封禁的 IP，省得内存使用过大
@@ -131,8 +139,6 @@ func (ban *Fail2ban) logNewIP(lip logIP) error {
 			ban.bannedTimeoutList.Remove(first)
 			ban.block.UnblockIP(fbip.ipstr)
 		}
-
-		return nil
 	}
 	return nil
 }

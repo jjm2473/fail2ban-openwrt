@@ -29,7 +29,7 @@ func AddIPToIPSet(ips []string) error {
 
 func FlushIPSet() error {
 	if _, err := exec.LookPath("nft"); err == nil {
-		nftCmd := exec.Command("nft", "list", "set", "inet", "fw4", ipsetName)
+		nftCmd := exec.Command("nft", "flush", "set", "inet", "fw4", ipsetName)
 		if err := nftCmd.Run(); err != nil {
 			return err
 		}
@@ -56,4 +56,59 @@ func RemoveIPFromIPSet(ip string) error {
 		return err
 	}
 	return nil
+}
+
+func ShowIPsets() chan string {
+	ips := make(chan string, 16)
+	go func() {
+		defer close(ips)
+
+		// Try nft first
+		if _, err := exec.LookPath("nft"); err == nil {
+			cmd := exec.Command("nft", "list", "set", "inet", "fw4", ipsetName)
+			out, err := cmd.Output()
+			if err == nil {
+				lines := strings.Split(string(out), "\n")
+				found := false
+				var ipsBuffer []string
+				for _, line := range lines {
+					if strings.Contains(line, "elements = {") {
+						found = true
+						line = strings.TrimPrefix(line, "elements = {")
+						ipsBuffer = append(ipsBuffer, strings.TrimSpace(line))
+					} else if found && strings.Contains(line, "}") {
+						line = strings.TrimSuffix(line, "}")
+						ipsBuffer = append(ipsBuffer, strings.TrimSpace(line))
+						break
+					} else if found {
+						ipsBuffer = append(ipsBuffer, strings.TrimSpace(line))
+					}
+				}
+				if found {
+					for _, ip := range strings.Split(strings.Join(ipsBuffer, ""), ",") {
+						ip = strings.TrimSpace(ip)
+						if ip != "" {
+							ips <- ip
+						}
+					}
+					return
+				}
+			}
+		}
+
+		// Fallback to ipset
+		cmd := exec.Command("ipset", "list", ipsetName)
+		out, err := cmd.Output()
+		if err != nil {
+			return
+		}
+		lines := strings.Split(string(out), "\n")
+		for _, line := range lines {
+			if strings.HasPrefix(line, " ") {
+				ip := strings.Fields(line)[0]
+				ips <- ip
+			}
+		}
+	}()
+	return ips
 }
