@@ -97,11 +97,11 @@ Start 函数就是启动监控，并分析时间，以及文本，如果是 IsDr
 ```
 
 nft list table inet fw4|grep fail2ban
-nft add set inet fw4 fail2banop { type ipv4_addr \; }
-nft add element inet fw4 fail2banop { 192.0.2.1, 192.0.2.3 }
-nft delete element inet fw4 fail2banop { 192.0.2.1 }
-nft flush set inet fw4 fail2banop
-nft list set inet fw4 fail2banop
+nft add set inet fw4 fail2banop4 { type ipv4_addr \; }
+nft add element inet fw4 fail2banop4 { 192.0.2.1, 192.0.2.3 }
+nft delete element inet fw4 fail2banop4 { 192.0.2.1 }
+nft flush set inet fw4 fail2banop4
+nft list set inet fw4 fail2banop4
 
 ```
 
