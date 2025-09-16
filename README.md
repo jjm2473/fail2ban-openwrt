@@ -54,5 +54,4 @@ GLOBAL OPTIONS:
 
 ## TODO
 
-* IPv6 supported
-* OpenWRT 22.03 iptables supported
+* OpenWRT 22.03 iptables/ipset supported
