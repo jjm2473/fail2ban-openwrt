@@ -24,7 +24,7 @@ var (
 type ipsetBlocker struct{}
 
 func (b *ipsetBlocker) BlockIP(ipstr string) error {
-	return fail2ban_op.AddIPToIPSet([]string{ipstr})
+	return fail2ban_op.AddIPToIPSet(ipstr)
 }
 
 func (b *ipsetBlocker) UnblockIP(ipstr string) error {
