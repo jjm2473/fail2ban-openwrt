@@ -24,6 +24,12 @@ func TestIsUhttpdLoginErrorLog(t *testing.T) {
 			wantOK: false,
 		},
 		{
+			name:   "ipv6 match",
+			log:    "daemon.err uhttpd[1234]: [info] luci: failed login on / for root from fdac:b153:8eb3:1:be24:11ff:feb9:9fa1",
+			wantIP: "fdac:b153:8eb3:1:be24:11ff:feb9:9fa1",
+			wantOK: true,
+		},
+		{
 			name:   "wrong format",
 			log:    "random log line",
 			wantIP: "",
