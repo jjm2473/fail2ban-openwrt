@@ -104,3 +104,7 @@ nft flush set inet fw4 fail2banop
 nft list set inet fw4 fail2banop
 
 ```
+
+### SSH force login
+
+* ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.30.244
