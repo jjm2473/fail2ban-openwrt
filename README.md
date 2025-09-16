@@ -27,3 +27,27 @@ When a user attempts to log in to OpenWRT via SSH or LuCI and enters incorrect p
 To optimize efficiency when dealing with a large number of IPs, ipset is utilized for blocking.  
 To prevent excessive memory usage due to accumulated banned IPs over extended periods (e.g., six months to a year), banned IPs are automatically released after a certain time.  
 To handle situations where a sudden surge of IP attacks occurs, the system automatically bans the newest IPs while releasing the oldest ones once the stored ipset reaches a predefined limit, ensuring constant memory usage.
+
+## Usage
+
+```
+fail2banop --help
+NAME:
+   fail2ban-openwrt - Fail2ban for OpenWrt
+
+USAGE:
+   fail2ban-openwrt [global options] command [command options]
+
+COMMANDS:
+   version       Show the current version
+   show-ipset    Show the ipset used by fail2ban-openwrt
+   remove-ipset  Remove the ipset used by fail2ban-openwrt
+   help, h       Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+   --window value        Login error window (seconds) (default: 600)
+   --threshold value     Login error threshold (default: 10)
+   --ban-duration value  Ban duration (minutes) (default: 1440)
+   --show-banned-ips     Show currently banned IPs, for debugging (default: false)
+   --help, -h            show help
+```
