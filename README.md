@@ -51,3 +51,8 @@ GLOBAL OPTIONS:
    --show-banned-ips     Show currently banned IPs, for debugging (default: false)
    --help, -h            show help
 ```
+
+## TODO
+
+* IPv6 supported
+* OpenWRT 22.03 iptables supported
