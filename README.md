@@ -1,6 +1,8 @@
 # fail2ban-openwrt
-A better fail2ban version only for OpenWRT/iStoreOS. 
-Now only works in OpenWrt/iStoreOS 24.10 that using nft
+* A better fail2ban specifically designed for OpenWrt/iStoreOS. 
+* Now only works in OpenWrt/iStoreOS 24.10 that using nft
+* 一个专门为 OpenWrt/iStoreOS 设计的更好的 fail2ban
+* 当前只能运行在使用 nft 的 OpenWrt/iStoreOS 系统上
 
 ## Build ipk for openwrt
 
