@@ -32,23 +32,23 @@ func main() {
 			&cli.IntFlag{
 				Name:  "window",
 				Usage: "Login error window (seconds)",
-				Value: 60,
+				Value: 600,
 			},
 			&cli.IntFlag{
 				Name:  "threshold",
 				Usage: "Login error threshold",
-				Value: 5,
+				Value: 8,
 			},
 			&cli.IntFlag{
 				Name:  "ban-duration",
-				Usage: "Ban duration (seconds)",
-				Value: 600,
+				Usage: "Ban duration (minutes)",
+				Value: 60 * 24,
 			},
 		},
 		Action: func(c *cli.Context) error {
 			window := c.Int("window")
 			threshold := c.Int("threshold")
-			banDuration := c.Int("ban-duration")
+			banDuration := c.Int("ban-duration") * 60
 
 			blocker := &ipsetBlocker{}
 			fail2ban := fail2ban_op.NewFail2ban(window, threshold, banDuration, blocker)
