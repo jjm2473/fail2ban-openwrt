@@ -4,7 +4,7 @@ import (
 	"regexp"
 )
 
-var uhttpdLoginErrorRegex = regexp.MustCompile(`daemon\.err uhttpd\[\d+\]: \[info\] luci: failed login on / for root from ([0-9a-fA-F:.]+)`)
+var uhttpdLoginErrorRegex = regexp.MustCompile(`luci: failed login on /.* from ([0-9a-fA-F:.]+)$`)
 
 // IsUhttpdLoginErrorLog 判断日志行是否为 uhttpd 的 HTTP 密码错误日志，并提取 IP。
 func IsUhttpdLoginErrorLog(entry *LogEntry) (ip string, ok bool) {
